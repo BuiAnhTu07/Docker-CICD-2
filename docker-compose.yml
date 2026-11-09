@@ -1,7 +1,18 @@
+version: '3.8'
+
 services:
-  web:
+  web-app:
     build: .
-    container_name: ci-cd-demo
+    container_name: web_app_container
+    restart: always
+
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: nginx_proxy_container
     ports:
-      - "8080:80"
-    restart: unless-stopped
+      - "80:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    depends_on:
+      - web-app
+    restart: always
